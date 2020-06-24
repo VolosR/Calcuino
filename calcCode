@@ -1,0 +1,191 @@
+//We always have to include the library
+#include "LedControl.h"
+
+int led = 10;
+LedControl lc=LedControl(A5,A4,A3,1);
+
+/* we always wait a bit between updates of the display */
+unsigned long delaytime=1;
+
+void setup() {
+
+    
+
+  //sets the frequency for the specified pin
+ 
+ for(int i=0;i<14;i++)
+ pinMode(i,INPUT_PULLUP);
+  pinMode(12,INPUT_PULLUP);
+    pinMode(A2,INPUT_PULLUP);
+    
+  lc.shutdown(0,false);
+  /* Set the brightness to a medium values */
+  lc.setIntensity(0,5);
+  /* and clear the display */
+  lc.clearDisplay(0);
+   //lc.setDigit(0,0,0,false);
+ 
+
+}
+
+double num1,num2,res=0;
+int fase=0;
+double broj=0;
+int pri, pri2;
+float ost;
+int i=6;
+int pom[10]={0};
+int p=0;
+int p2,p3,p4,p5=0;
+int operation=0;
+
+
+void loop() { 
+
+if(fase<2){
+ for(int i=0;i<10;i++){
+ 
+ if(digitalRead(i)==0)
+ {
+  
+  if(pom[i]==0)
+  {
+  broj=(broj*10)+i;
+
+ 
+ pom[i]=1;
+  }
+
+ } else {pom[i]=0;} 
+ }
+
+}
+
+
+ int j=5;
+ long pom=broj;
+ while(pom>0){
+  
+  if(j==3 && operation==4){
+  lc.setDigit(0,j,pom%10,true);}
+  else
+  {lc.setDigit(0,j,pom%10,false);}
+  pom=pom/10;
+  j--;
+ }
+
+ if(fase==0)
+ if(broj==0)
+ lc.setDigit(0,5,0,false);
+ 
+
+
+
+ if(fase==0)
+ if(analogRead(A6)==0){
+ if(p==0)
+ {
+  operation=1;
+  fase++;
+  num1=broj;
+ broj=0;
+lc.clearDisplay(0);
+ p=1;
+ 
+ }
+ }else{p=0;}
+ 
+ if(fase==0)
+if(digitalRead(13)==0){
+ if(p3==0)
+ {
+  operation=2;
+  fase++;
+  num1=broj;
+ broj=0;
+ lc.clearDisplay(0);
+ p3=1;
+ }
+ }
+ 
+ else{p3=0;}
+
+ if(fase==0)
+ if(digitalRead(12)==0){
+ if(p4==0)
+ {
+  operation=3;
+  fase++;
+  num1=broj;
+ broj=0;
+ lc.clearDisplay(0);
+ p4=1;
+ }
+ }
+ 
+ else{p4=0;}
+
+  if(fase==0)
+ if(digitalRead(11)==0){
+ if(p5==0)
+ {
+  operation=4;
+  fase++;
+  num1=broj;
+ broj=0;
+ lc.clearDisplay(0);
+ p5=1;
+ }
+ }
+ 
+ else{p5=0;}
+
+
+
+
+ if(digitalRead(A2)==0){
+ if(p2==0)
+ {
+  fase++;
+  if(fase==3)
+ {
+  broj=0;
+  fase=0;
+  num1=0;
+  num2=0;
+  operation=0;
+  }
+ num2=broj;
+ broj=0;
+ lc.clearDisplay(0);
+ if(operation==1)
+ broj=num1+num2;
+  if(operation==2)
+ broj=num1-num2;
+ if(operation==3)
+ broj=num1*num2;
+ if(operation==4)
+ {
+ 
+broj=num1/num2;
+int z=broj;
+double ost=broj-z;
+if(ost>0)
+  {
+  
+  broj=(z*100)+(ost*100);
+  }
+  
+  }
+ p2=1;
+ }
+ }
+ 
+ else{p2=0;}
+
+ 
+ 
+ 
+
+
+}
